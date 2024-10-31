@@ -2,6 +2,7 @@
 
 import OpenAI from 'openai';
 import { openAiApiKey } from './config';
+import { parseQuestions } from '@/app/utils/parseQuestions';
 
 export async function fetchQuestions(
   previousState: unknown,
@@ -18,10 +19,9 @@ export async function fetchQuestions(
       {
         role: 'user',
         content: `
-            Generate a title and 10 multiple-choice questions (with 4 answer options each) to test understanding of the following article:
+            Generate 10 multiple-choice questions (with 4 answer options each) to test understanding of the following article:
             ${formData.get('url')}
-            Please provide the title and questions in this format:
-            Title: <title>
+            Please provide the questions in this format:
             Q1: <question>
             A) <option1>
             B) <option2>
@@ -33,5 +33,5 @@ export async function fetchQuestions(
     ],
   });
 
-  return completion.choices[0].message.content;
+  return parseQuestions(completion.choices[0].message.content);
 }
