@@ -1,22 +1,43 @@
-import withFadeAnimations from '@/components/withFadeAnimations';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Input,
+  Textarea,
+} from '@/components/ui';
+import { Loader2 } from 'lucide-react';
 
-function ArticleForm({ submitAction }) {
+function ArticleForm({ submitAction, isPending }) {
   return (
-    <div className="w-80 bg-gray-600 p-8 rounded-md transition-opacity duration-500">
-      <h1>Test your focus</h1>
-      <form className="flex flex-col m-1" action={submitAction}>
-        <label>Paste Article URL</label>
-        <input
-          className="outline-none bg-gray-800 rounded"
-          type="text"
-          name="url"
-        />
-        <label>Or Paste Article Text</label>
-        <textarea className="outline-none bg-gray-800 rounded" name="article" />
-        <button type="submit">Test</button>
-      </form>
-    </div>
+    <Card className="mb-4 p-4 dark">
+      <CardHeader className="mb-4 text-center text-xl">
+        Didja Read It?
+      </CardHeader>
+      <CardContent>
+        <form className="flex flex-col m-1" action={submitAction}>
+          <label className="text-center">Paste the Article URL Here</label>
+          <Input className="my-4 rounded" type="text" name="url" />
+          <label className="mt-4 text-center">
+            Or Drop the Article Text Below
+          </label>
+          <Textarea className="my-4 rounded" name="article" />
+          <div className="flex justify-center">
+            <Button className="my-4 rounded w-3/4" disabled={isPending}>
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating Quiz
+                </>
+              ) : (
+                'Generate Quiz'
+              )}
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
 
-export default withFadeAnimations(ArticleForm);
+export default ArticleForm;
