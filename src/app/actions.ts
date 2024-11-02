@@ -4,12 +4,21 @@ import OpenAI from 'openai';
 import { openAiApiKey } from './config';
 import { parseQuestions } from '@/app/utils/parseQuestions';
 import { QuestionsResponse } from '@/app/types';
+import { htmlToText } from '@/app/utils/htmlToText';
 
 export async function fetchQuestions(
   previousState: QuestionsResponse | null,
   formData: FormData,
 ): Promise<QuestionsResponse> {
-  const articleOrUrl = formData.get('url') ?? formData.get('article');
+  let article;
+  const url = formData.get('url');
+  if (url) {
+    const response = await fetch(url);
+    const html = await response.text();
+    article = htmlToText(html);
+  } else {
+    article = formData.get('article');
+  }
 
   const openai = new OpenAI({
     apiKey: openAiApiKey,
@@ -25,7 +34,7 @@ export async function fetchQuestions(
           role: 'user',
           content: `
             Generate 10 multiple-choice questions (with 4 answer options each) to test understanding of the following article:
-            ${articleOrUrl}
+            ${article}
             Please provide the questions in this format:
             Q1: <question>
             A) <option1>
