@@ -8,14 +8,24 @@ import {
 } from '@/components/ui';
 import { Loader2 } from 'lucide-react';
 
-function ArticleForm({ submitAction, isPending }) {
+function ArticleForm({
+  submitAction,
+  isPending,
+}: {
+  submitAction: (payload: FormData) => void;
+  isPending: boolean;
+}) {
   return (
     <Card className="mb-4 p-4 dark">
       <CardHeader className="mb-4 text-center text-xl">
         Didja Read It?
       </CardHeader>
       <CardContent>
-        <form className="flex flex-col m-1" action={submitAction}>
+        {/* TODO: remove type assertion when React 19 stable */}
+        <form
+          className="flex flex-col m-1"
+          action={submitAction as unknown as string}
+        >
           <label className="text-center">Paste the Article URL Here</label>
           <Input className="my-4 rounded" type="text" name="url" />
           <label className="mt-4 text-center">

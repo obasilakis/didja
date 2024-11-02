@@ -11,7 +11,7 @@ export function parseQuestions(questionString: string): Question[] {
     const questionContent = item[0];
     const correctAnswerLetter = item[item.length - 1]
       .replace('Answer: ', '')
-      .trim();
+      .trim() as 'A' | 'B' | 'C' | 'D';
     const correctAnswerIndex = answerMapping[correctAnswerLetter] - 1;
 
     const answers = item.slice(1, -1).map((answer, index) => ({

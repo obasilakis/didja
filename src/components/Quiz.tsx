@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Question } from '@/app/types';
 
-function Quiz({ questions }) {
-  const [answers, setAnswers] = useState({});
+function Quiz({ questions }: { questions: Question[] }) {
+  const [answers, setAnswers] = useState<{ [key: number]: string }>({});
   const [showResults, setShowResults] = useState(false);
 
-  const handleChange = (questionIndex, value) => {
+  const handleChange = (questionIndex: number, value: string) => {
     setAnswers({
       ...answers,
       [questionIndex]: value,
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setShowResults(true);
   };
@@ -22,7 +23,7 @@ function Quiz({ questions }) {
   const calculateScore = () => {
     let score = 0;
     questions.forEach((question, qIdx) => {
-      const userAnswerIndex = answers[qIdx];
+      const userAnswerIndex = parseInt(answers[qIdx], 10);
       if (
         userAnswerIndex !== undefined &&
         question.answers[userAnswerIndex]?.isCorrect
@@ -35,8 +36,8 @@ function Quiz({ questions }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      {questions.map((question, qIdx) => {
-        const userAnswerIndex = answers[qIdx];
+      {questions.map((question: Question, qIdx: number) => {
+        const userAnswerIndex = parseInt(answers[qIdx], 10);
         const userAnswer = question.answers[userAnswerIndex];
         const correctAnswer = question.answers.find(
           (answer) => answer.isCorrect,
@@ -47,7 +48,7 @@ function Quiz({ questions }) {
             <h3 className="text-lg font-semibold mb-4">{question.content}</h3>
             <RadioGroup
               className="my-2"
-              value={userAnswerIndex}
+              value={userAnswerIndex.toString()}
               onValueChange={(value) => handleChange(qIdx, value)}
             >
               {question.answers.map((answer, aIdx) => (
@@ -73,7 +74,7 @@ function Quiz({ questions }) {
                       ✖️ Incorrect
                     </p>
                     <p className="text-sm">
-                      Correct answer: <strong>{correctAnswer.content}</strong>
+                      Correct answer: <strong>{correctAnswer!.content}</strong>
                     </p>
                   </>
                 )}
