@@ -12,7 +12,7 @@ export async function fetchQuestions(
 ): Promise<QuestionsResponse> {
   let article;
   const url = formData.get('url');
-  if (url) {
+  if (typeof url === 'string') {
     const response = await fetch(url);
     const html = await response.text();
     article = htmlToText(html);
