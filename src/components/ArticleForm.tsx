@@ -33,11 +33,11 @@ function ArticleForm({
           </label>
           <Textarea className="my-4 rounded" name="article" />
           <div className="flex justify-center">
-            <Button className="my-4 rounded w-3/4" disabled={isPending}>
+            <Button className="my-4 rounded w-3/4 min-w-fit" disabled={isPending}>
               {isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Generating Quiz
+                  <span className="whitespace-nowrap">Generating Quiz</span>
                 </>
               ) : (
                 'Generate Quiz'
